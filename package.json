@@ -10,6 +10,7 @@
     "lintfix": "eslint ./src --fix --quiet && echo '✔ All good!'",
     "lint": "eslint ./src --quiet && echo '✔ All good!'",
     "lintinit": "eslint --init",
+    "postinstall": "npm run trans",
     "trans": "node_modules/.bin/babel src/ -d lib/ --extensions '.ts'"
   },
   "keywords": [
