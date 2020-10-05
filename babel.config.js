@@ -1,6 +1,18 @@
 const presets = [
   '@babel/typescript',
-  ['@babel/env', { modules: false }]
+  ['@babel/env', {
+    targets: {
+      'browsers': [
+        'ie >= 11',
+        'last 2 iOS major versions',
+        'last 2 Firefox major versions',
+        'last 2 Safari major versions',
+        'last 2 Chrome major versions'
+      ]
+    },
+    useBuiltIns: 'usage',
+    corejs: 2
+  }]
 ]
 
 const plugins = [
