@@ -17,6 +17,11 @@
   ],
   "author": "warren@majestic-mint.co.uk",
   "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run trans"
+    }
+  },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
     "metalsmith": "^2.3.0",
@@ -42,11 +47,9 @@
     "@typescript-eslint/parser": "^4.3.0",
     "debug": "^4.2.0",
     "eslint": "^7.10.0",
+    "husky": "^4.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "typescript": "^4.0.3",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "typescript": "^4.0.3"
   }
 }
