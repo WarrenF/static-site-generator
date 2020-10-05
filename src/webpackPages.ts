@@ -50,13 +50,12 @@ const webpackPages = (globalOptions: any) => {
       outputFiles[ destFilename.replace('.js', '') ] = filename
 
       return new Promise((resolve, reject) => {
-        mkdirp(path.dirname(filename), error => {
-          if (error) return reject(error)
+        mkdirp(path.dirname(filename)).then(() => {
           return fs.writeFile(filename, output, (err) => {
             if (err) return reject(err)
             return resolve('done')
           })
-        })
+        }).catch((err: Error) => reject(err))
       })
     }
 
@@ -75,7 +74,7 @@ const webpackPages = (globalOptions: any) => {
     const finishAll = () => {
       if (typeof globalOptions.webpack === 'function') globalOptions.webpack = globalOptions.webpack(globalOptions)
       if (!outputFiles || Object.keys(outputFiles).length < 1) {
-        rm(path.join(metalsmith._directory, '_tempOutput'), (err) => { console.log(err) })
+        rm(path.join(metalsmith._directory, '_tempOutput'), () => { /*Do nothing*/ })
         const webpackError = 'No outputFiles for webpack'
         console.log(webpackError)
         if (globalOptions.callback) return globalOptions.callback(new Error(webpackError))
@@ -83,14 +82,13 @@ const webpackPages = (globalOptions: any) => {
       globalOptions.webpack.entry = outputFiles
       webpack(globalOptions.webpack, (err, stats) => {
         if (err) {
-          console.log(err.stack || err)
           if (err.details) console.log(err.details)
           if (globalOptions.callback) return globalOptions.callback(err)
           throw err
         }
         const info = stats.toJson()
         if (stats.hasErrors()) console.log(info.errors)
-        rm(path.join(metalsmith._directory, '_tempOutput'), (err) => { console.log(err) })
+        rm(path.join(metalsmith._directory, '_tempOutput'), () => { /*Do nothing*/ })
         if (globalOptions.callback) globalOptions.callback(null, Object.keys(outputFiles))
       })
     }
