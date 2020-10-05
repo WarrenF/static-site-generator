@@ -1,14 +1,15 @@
-// import path from 'path'
+import path from 'path'
 import Metalsmith from 'metalsmith'
 import markdown from 'metalsmith-markdown'
 import template from 'metalsmith-react-tpl'
-// import assets from 'metalsmith-assets-improved'
+import assets from 'metalsmith-assets-improved'
 import { Options } from './types'
 
 // import getDataSource from './getDataSource'
 // import getPrismicContent from './getPrismicContent'
 // import singleFileOnly from './singleFileOnly'
-// import webpackPages from './webpackPages'
+
+import webpackPages from './webpackPages'
 
 const MetalSmithLoader = (opts: Options): void => {
 
@@ -20,8 +21,8 @@ const MetalSmithLoader = (opts: Options): void => {
   if (!opts.templateDir) throw new Error('No templateDir param provided for the template directory')
   if (!opts.layoutDir) throw new Error('No layoutDir param provided for the layouts directory')
   if (!opts.destination) throw new Error('No destination param provided for the output directory')
-  //if (!opts.assets) throw new Error('No assets param provided for the assets directory')
-  //if (!opts.webpack) throw new Error('No option for webpack has been passed')
+  if (!opts.assets) throw new Error('No assets param provided for the assets directory')
+  if (!opts.webpack) throw new Error('No option for webpack has been passed')
   if (opts.showReactIDs) isStatic = false
   if (opts.devMode) {
     opts.config = Object.assign({}, opts.config, { devMode: true })
@@ -53,13 +54,10 @@ const MetalSmithLoader = (opts: Options): void => {
       directory: opts.templateDir
     }))
     .destination(opts.destination)
-    /*
     .use(assets({
       src: './' + opts.assets,
       dest: './'
     }))
-    */
-    /*
     .use(webpackPages({
       directory: opts.templateDir,
       options: opts.webpackOptions,
@@ -68,7 +66,6 @@ const MetalSmithLoader = (opts: Options): void => {
       webpack: require(path.join(opts.src, opts.webpack)),
       callback: opts.callback
     }))
-    */
 
   if (opts.markDownSource) {
     metalSmith.source(opts.markDownSource)

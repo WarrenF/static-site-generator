@@ -7,9 +7,8 @@
     "build": "npm run trans",
     "check-types": "tsc",
     "ci": "npm run lint",
-    "lintfix": "eslint ./src --fix --quiet && echo '✔ All good!'",
-    "lint": "eslint ./src --quiet && echo '✔ All good!'",
-    "lintinit": "eslint --init",
+    "lintfix": "npm run check-types && eslint ./src --fix --quiet && echo '✔ All good!'",
+    "lint": "npm run check-types && eslint ./src --quiet && echo '✔ All good!'",
     "postinstall": "npm run trans",
     "trans": "node_modules/.bin/babel src/ -d lib/ --extensions '.ts'"
   },
@@ -20,16 +19,19 @@
   "license": "ISC",
   "husky": {
     "hooks": {
-      "pre-commit": "npm run trans"
+      "pre-commit": "npm run lint && npm run trans"
     }
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
+    "deepmerge": "^4.2.2",
+    "install": "^0.13.0",
     "metalsmith": "^2.3.0",
     "metalsmith-assets-improved": "^1.0.1",
     "metalsmith-markdown": "^1.3.0",
     "metalsmith-react-tpl": "^3.0.2",
     "mkdirp": "^1.0.4",
+    "npm": "^6.14.8",
     "prismic.io": "^3.6.1",
     "rimraf": "^3.0.2"
   },
@@ -39,18 +41,16 @@
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
     "@babel/preset-env": "^7.11.5",
-    "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@types/metalsmith": "^2.3.0",
-    "@types/react": "^16.9.50",
-    "@types/react-dom": "^16.9.8",
+    "@types/rimraf": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
     "debug": "^4.2.0",
     "eslint": "^7.10.0",
     "husky": "^4.3.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   }
 }

@@ -1,8 +1,4 @@
 module.exports = {
-  env: {
-    'browser': true,
-    'es2021': true
-  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended'
@@ -12,9 +8,7 @@ module.exports = {
     'ecmaVersion': 12,
     'sourceType': 'module'
   },
-  plugins: [
-    '@typescript-eslint'
-  ],
+  plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off'
