@@ -37,7 +37,7 @@ const webpackPages = (globalOptions: any) => {
                     window.SSGTemplateGroup = '${templateGroup}';`
       if (props.store) {
         output += `var Provider = require( 'react-redux' ).Provider;
-                   var store = require( '${props.store}' );
+                   var store = require( '${props.store}' ).default;
                    window.ReactRootProvider = Provider;
                    window.ReactRootStore = store;
                    var renderedElement = ReactDOM.${method}( <Provider store={ store }><Element {...props} /></Provider>, document.getElementById( 'content' ));`

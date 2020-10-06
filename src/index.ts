@@ -4,8 +4,8 @@ import markdown from 'metalsmith-markdown'
 import template from 'metalsmith-react-tpl'
 import assets from 'metalsmith-assets-improved'
 import { Options } from './types'
+import getDataSource from './getDataSource'
 
-// import getDataSource from './getDataSource'
 // import getPrismicContent from './getPrismicContent'
 // import singleFileOnly from './singleFileOnly'
 
@@ -13,10 +13,8 @@ import webpackPages from './webpackPages'
 
 const MetalSmithLoader = (opts: Options): void => {
 
-  // TODO: Add in datasources
-  // if (!opts.dataSource) throw new Error('No dataSource param provided for the content endpoint')
-
   let isStatic = true
+  if (!opts.dataSource) throw new Error('No dataSource param provided for the content endpoint')
   if (!opts.src) throw new Error('No src param provided for the .md file directory')
   if (!opts.templateDir) throw new Error('No templateDir param provided for the template directory')
   if (!opts.layoutDir) throw new Error('No layoutDir param provided for the layouts directory')
@@ -30,12 +28,12 @@ const MetalSmithLoader = (opts: Options): void => {
 
   opts.clean = opts.clean ? opts.clean : false
 
-  // const dataSource = getDataSource(opts)
+  const dataSource = getDataSource(opts)
 
   const metalSmith = Metalsmith(opts.src)
     .clean(opts.clean)
     .metadata(opts.config || { })
-    // .use(dataSource)
+    .use(dataSource)
 
   /*
   if (opts.dataSource && opts.dataSource.type === 'prismic') {
