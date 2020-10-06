@@ -80,7 +80,7 @@ const webpackPages = (globalOptions: any) => {
         if (globalOptions.callback) return globalOptions.callback(new Error(webpackError))
       }
       globalOptions.webpack.entry = outputFiles
-      webpack(globalOptions.webpack, (err, stats) => {
+      webpack(globalOptions.webpack, (err: any, stats) => {
         if (err) {
           if (err.details) console.log(err.details)
           if (globalOptions.callback) return globalOptions.callback(err)
