@@ -4,46 +4,34 @@ import mkdirp from 'mkdirp'
 import path from 'path'
 import rm from 'rimraf'
 import webpack from 'webpack'
+import { Page, WebpackGenerateOutputOptions } from './types'
 
 let outputFiles = { }
 
 const webpackPages = (globalOptions: any) => {
-  /* Return to metalsmith */
-  return (files, metalsmith, done) => {
+  return (files: { [key: string]: Page }, metalsmith: any, done: any) => {
     done()
     if (!globalOptions.webpack || !globalOptions.dest || !globalOptions.directory) return
 
     globalOptions.tempDir = path.join(metalsmith._directory, '_tempOutput')
     globalOptions.dest = path.join(metalsmith._directory, globalOptions.dest)
 
-    const generateOutput = (template, props, options) => {
-      const method = props.dataSource && props.dataSource.hydrate ? 'hydrate' : 'render'
-      if (props.dataSource && props.dataSource.store) {
-        props.store = props.dataSource.baseFolder || ''
-        if (props.pagename && !props.dataSource.store.includes('../')) {
-          props.store += props.pagename.split('/').map(() => '../').join('')
-        }
-        props.store += props.dataSource.store
-      }
+    const generateOutput = (template: string, props: any, options: WebpackGenerateOutputOptions) => {
+      const method = 'hydrate'
       const templateGroups = metalsmith._directory.split('/templates')
       const templateGroup = templateGroups.length > 1 ? '/templates' + templateGroups[1] : (props.group || '')
-      let output = `var React = require( 'react' );
-                    var ReactDOM = require( 'react-dom' );
-                    var Element = require( '${template}' );
-                    window.ReactRoot = Element;
-                    if ( typeof Element.default === 'function' ) Element = Element.default;
-                    var props = ${JSON.stringify(props)};
-                    window.ReactRootProps = props;
-                    window.SSGTemplateGroup = '${templateGroup}';`
-      if (props.store) {
-        output += `var Provider = require( 'react-redux' ).Provider;
-                   var store = require( '${props.store}' ).default;
-                   window.ReactRootProvider = Provider;
-                   window.ReactRootStore = store;
-                   var renderedElement = ReactDOM.${method}( <Provider store={ store }><Element {...props} /></Provider>, document.getElementById( 'content' ));`
-      } else {
-        output += `var renderedElement = ReactDOM.${method}( <Element {...props} />, document.getElementById( 'content' ));`
-      }
+
+      const output = `
+        var React = require( 'react' );
+        var ReactDOM = require( 'react-dom' );
+        var Element = require( '${template}' );
+        window.ReactRoot = Element;
+        if ( typeof Element.default === 'function' ) Element = Element.default;
+        var props = ${JSON.stringify(props)};
+        window.ReactRootProps = props;
+        window.SSGTemplateGroup = '${templateGroup}';
+        var renderedElement = ReactDOM.${method}( <Element {...props} />, document.getElementById( 'content' ));
+      `
 
       const destFilename = options.destFilename
       const filename = path.join(options.tempDir, destFilename)
@@ -59,7 +47,7 @@ const webpackPages = (globalOptions: any) => {
       })
     }
 
-    const iterator = (prop, file) => {
+    const iterator = (prop: Page, file: string) => {
       const props: any = deepmerge({ }, prop, metalsmith._metadata)
       props.tpl = (globalOptions.noConflict) ? 'rtemplate' : 'template'
       if (!props[ props.tpl ]) return false
@@ -71,7 +59,7 @@ const webpackPages = (globalOptions: any) => {
       return generateOutput(template, props, globalOptions)
     }
 
-    const finishAll = () => {
+    const finishAll = (): void => {
       if (typeof globalOptions.webpack === 'function') globalOptions.webpack = globalOptions.webpack(globalOptions)
       if (!outputFiles || Object.keys(outputFiles).length < 1) {
         rm(path.join(metalsmith._directory, '_tempOutput'), () => { /*Do nothing*/ })
