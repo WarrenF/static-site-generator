@@ -8,7 +8,7 @@ import { Page, WebpackGenerateOutputOptions } from './types'
 
 let outputFiles = { }
 
-const webpackPages = (globalOptions: any) => {
+const webpackPages = async (globalOptions: any) => {
   return (files: { [key: string]: Page }, metalsmith: any, done: any) => {
     done()
     if (!globalOptions.webpack || !globalOptions.dest || !globalOptions.directory) return
@@ -65,19 +65,19 @@ const webpackPages = (globalOptions: any) => {
         rm(path.join(metalsmith._directory, '_tempOutput'), () => { /*Do nothing*/ })
         const webpackError = 'No outputFiles for webpack'
         console.log(webpackError)
-        if (globalOptions.callback) return globalOptions.callback(new Error(webpackError))
+        if (globalOptions.webpackCallback) return globalOptions.webpackCallback(new Error(webpackError))
       }
       globalOptions.webpack.entry = outputFiles
       webpack(globalOptions.webpack, (err: any, stats) => {
         if (err) {
           if (err.details) console.log(err.details)
-          if (globalOptions.callback) return globalOptions.callback(err)
+          if (globalOptions.webpackCallback) return globalOptions.webpackCallback(err)
           throw err
         }
         const info = stats.toJson()
         if (stats.hasErrors()) console.log(info.errors)
         rm(path.join(metalsmith._directory, '_tempOutput'), () => { /*Do nothing*/ })
-        if (globalOptions.callback) globalOptions.callback(null, Object.keys(outputFiles))
+        if (globalOptions.webpackCallback) return globalOptions.webpackCallback(null, Object.keys(outputFiles))
       })
     }
 
@@ -93,7 +93,7 @@ const webpackPages = (globalOptions: any) => {
       .all(promises)
       .then(finishAll)
       .catch(function (err) {
-        if (globalOptions.callback) globalOptions.callback(err)
+        if (globalOptions.webpackCallback) return globalOptions.webpackCallback(err)
         console.error(err)
       })
   }

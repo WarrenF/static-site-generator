@@ -1,4 +1,4 @@
-export type Options = {
+export type BuildConfig = {
   assets?: string
   callback?: (err?: any, data?: any) => any
   clean?: boolean
@@ -12,6 +12,7 @@ export type Options = {
   src: string
   templateDir?: string
   webpack?: string
+  webpackCallback?: (err?: any, data?: any) => any
   webpackOptions?: any
 }
 

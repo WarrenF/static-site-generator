@@ -1,6 +1,6 @@
-import { Options } from './types'
+import { BuildConfig } from './types'
 
-const getDataSource = (opts: Options) => {
+const getDataSource = (opts: BuildConfig) => {
   if (!opts.dataSource) return false
 
   if (typeof opts.dataSource === 'function') return opts.dataSource

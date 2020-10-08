@@ -3,7 +3,7 @@ import Metalsmith from 'metalsmith'
 import markdown from 'metalsmith-markdown'
 import template from 'metalsmith-react-tpl'
 import assets from 'metalsmith-assets-improved'
-import { Options } from './types'
+import { BuildConfig } from './types'
 import getDataSource from './getDataSource'
 
 // import getPrismicContent from './getPrismicContent'
@@ -11,9 +11,10 @@ import getDataSource from './getDataSource'
 
 import webpackPages from './webpackPages'
 
-const MetalSmithLoader = (opts: Options): void => {
+const MetalSmithLoader = async (opts: BuildConfig) => {
 
   let isStatic = true
+
   if (!opts.dataSource) throw new Error('No dataSource param provided for the content endpoint')
   if (!opts.src) throw new Error('No src param provided for the .md file directory')
   if (!opts.templateDir) throw new Error('No templateDir param provided for the template directory')
@@ -21,11 +22,11 @@ const MetalSmithLoader = (opts: Options): void => {
   if (!opts.destination) throw new Error('No destination param provided for the output directory')
   if (!opts.assets) throw new Error('No assets param provided for the assets directory')
   if (!opts.webpack) throw new Error('No option for webpack has been passed')
+
   if (opts.showReactIDs) isStatic = false
   if (opts.devMode) {
     opts.config = Object.assign({}, opts.config, { devMode: true })
   }
-
   opts.clean = opts.clean ? opts.clean : false
 
   const dataSource = getDataSource(opts)
@@ -56,13 +57,13 @@ const MetalSmithLoader = (opts: Options): void => {
       src: './' + opts.assets,
       dest: './'
     }))
-    .use(webpackPages({
+    .use(await webpackPages({
       directory: opts.templateDir,
       options: opts.webpackOptions,
       noConflict: false,
       dest: opts.destination + '/js',
       webpack: require(path.join(opts.src, opts.webpack)),
-      callback: opts.callback
+      webpackCallback: opts.webpackCallback
     }))
 
   if (opts.markDownSource) {
@@ -70,8 +71,8 @@ const MetalSmithLoader = (opts: Options): void => {
   }
 
   metalSmith.build((err: any) => {
-    if (err && opts.callback) return opts.callback(err)
     if (err) throw err
+    if (opts.callback) return opts.callback()
   })
 }
 
