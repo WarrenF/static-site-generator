@@ -11,6 +11,7 @@ export type BuildConfig = {
   showReactIDs?: boolean
   src: string
   templateDir?: string
+  renderToStatic?: boolean
   webpack?: string
   webpackCallback?: (err?: any, data?: any) => any
   webpackOptions?: any

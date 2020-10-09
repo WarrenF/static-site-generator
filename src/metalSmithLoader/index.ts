@@ -42,7 +42,7 @@ const MetalSmithLoader = async (opts: BuildConfig) => {
     .use(template({
       babel: true,
       noConflict: false,
-      isStatic: true,
+      isStatic: opts.renderToStatic ? opts.renderToStatic : false,
       baseFile: 'layout.jsx',
       baseFileDirectory: opts.layoutDir,
       directory: opts.templateDir
