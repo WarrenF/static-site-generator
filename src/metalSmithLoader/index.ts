@@ -13,8 +13,6 @@ import webpackPages from './webpackPages'
 
 const MetalSmithLoader = async (opts: BuildConfig) => {
 
-  let isStatic = true
-
   if (!opts.dataSource) throw new Error('No dataSource param provided for the content endpoint')
   if (!opts.src) throw new Error('No src param provided for the .md file directory')
   if (!opts.templateDir) throw new Error('No templateDir param provided for the template directory')
@@ -23,10 +21,7 @@ const MetalSmithLoader = async (opts: BuildConfig) => {
   if (!opts.assets) throw new Error('No assets param provided for the assets directory')
   if (!opts.webpack) throw new Error('No option for webpack has been passed')
 
-  if (opts.showReactIDs) isStatic = false
-  if (opts.devMode) {
-    opts.config = Object.assign({}, opts.config, { devMode: true })
-  }
+  if (opts.devMode) opts.config = Object.assign({}, opts.config, { devMode: true })
   opts.clean = opts.clean ? opts.clean : false
 
   const dataSource = getDataSource(opts)
@@ -47,7 +42,7 @@ const MetalSmithLoader = async (opts: BuildConfig) => {
     .use(template({
       babel: true,
       noConflict: false,
-      isStatic,
+      isStatic: true,
       baseFile: 'layout.jsx',
       baseFileDirectory: opts.layoutDir,
       directory: opts.templateDir

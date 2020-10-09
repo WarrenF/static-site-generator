@@ -62,7 +62,7 @@ const DevServer = async (opts: Opts) => {
     //   .on('all', async (event, file) => reBuild(file, '.js', uglifyJS, 'public/js'))
 
     const websiteTypescriptFiles = path.join(opts.root, 'website/(layouts|store|templates)/**/*.(ts|tsx)')
-    const distJsxFiles = path.join(opts.root, 'dist/(layouts|store|templates)/**/*.jsx')
+    const distJsxFiles = path.join(opts.root, 'dist/(layouts|store|templates)/**/*.(js|jsx)')
     const dist = path.join(opts.root, 'dist')
     const babelCfg = path.join(opts.root, 'babel.dev.config.js')
 
