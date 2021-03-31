@@ -1,3 +1,8 @@
+export type GlobalOpts = {
+  root: string
+  buildConfig: BuildConfig
+}
+
 export type BuildConfig = {
   assets?: string
   callback?: (err?: any, data?: any) => any
@@ -36,4 +41,20 @@ export type Page = {
   stats: any // Metalsmith stats object
   pageName?: string // Page url eg: 'category/test-page'
   html?: string // Html generated from md files (below yaml config)
+}
+
+export type sassOpts = GlobalOpts & {
+  inFile: string
+  outFile: string
+}
+
+export type fetchOpts = {
+  root: string,
+  url: string,
+  outFile: string
+  fetchConfig?: {
+    method: string
+    body?: { [key: string]: string }
+    headers?: { [key: string]: string }
+  }
 }

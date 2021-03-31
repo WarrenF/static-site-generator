@@ -8,18 +8,13 @@ import reload from 'reload'
 import directory from 'serve-index'
 import { debounce } from 'ts-debounce'
 
-import { BuildConfig } from '../MetalsmithLoader/types'
+import { GlobalOpts } from '../MetalsmithLoader/types'
 import { runCommand, create } from '../Scripts'
 
 const app = express()
 app.set('port', process.env.PORT || 8080)
 
-type Opts = {
-  root: string,
-  buildConfig: BuildConfig
-}
-
-const DevServer = async (opts: Opts) => {
+const DevServer = async (opts: GlobalOpts) => {
 
   // app.use('/favicon.ico', express.static(path.join(opts.root, `build/`)))
   app.use('/js/', express.static(path.join(opts.root, `build/js`)))
