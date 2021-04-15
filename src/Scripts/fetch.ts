@@ -1,13 +1,13 @@
 import path from 'path'
 import fs from 'fs'
-import { fetchOpts } from '../MetalsmithLoader/types'
+import { FetchOpts } from '../MetalsmithLoader/types'
 import fetch from 'node-fetch'
 
 const defaultFetchConfig = {
   method: 'GET'
 }
 
-export default async (opts: fetchOpts) => {
+export default async (opts: FetchOpts) => {
   const { root, url, fetchConfig = defaultFetchConfig, outFile } = opts
 
   if (!root) throw new Error('no root specified in fetch')
@@ -18,7 +18,7 @@ export default async (opts: fetchOpts) => {
   const res = await fetch(url, fetchConfig)
   const data = JSON.stringify(await res.json())
 
-  const outDir = path.join(root, 'build', 'config')
+  const outDir = path.join(root, 'dist', 'config')
   const outFilePath = path.join(outDir, outFile)
 
   // Create the directory if it doesn't already exist

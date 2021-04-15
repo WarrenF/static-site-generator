@@ -43,15 +43,32 @@ export type Page = {
   html?: string // Html generated from md files (below yaml config)
 }
 
-export type sassOpts = GlobalOpts & {
+export type SassOpts = GlobalOpts & {
   inFile: string
   outFile: string
 }
 
-export type fetchOpts = {
+export type FetchOpts = {
   root: string,
   url: string,
   outFile: string
+  fetchConfig?: {
+    method: string
+    body?: { [key: string]: string }
+    headers?: { [key: string]: string }
+  }
+}
+
+export type FetchMultiOpts = {
+  root: string
+  items: FetchItem[]
+}
+
+export type FetchItem = {
+  name: string
+  url: string
+  outFile: string
+  buildTimeOnly?: boolean
   fetchConfig?: {
     method: string
     body?: { [key: string]: string }

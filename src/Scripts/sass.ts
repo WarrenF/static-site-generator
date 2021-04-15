@@ -2,9 +2,9 @@ import path from 'path'
 import fs from 'fs'
 import CleanCSS from 'clean-css'
 import sass from 'node-sass'
-import { sassOpts } from '../MetalsmithLoader/types'
+import { SassOpts } from '../MetalsmithLoader/types'
 
-export default (opts: sassOpts) => {
+export default (opts: SassOpts) => {
   const { root, inFile, outFile } = opts
 
   // Add template group to this
